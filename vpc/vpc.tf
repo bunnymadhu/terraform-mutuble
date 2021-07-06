@@ -6,3 +6,4 @@ resource "aws_vpc" "main" {
     Name = "main"
   }
 }
+
