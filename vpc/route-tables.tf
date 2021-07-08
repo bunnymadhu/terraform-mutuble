@@ -1,5 +1,5 @@
 resource "aws_route_table" "private-rt" {
-  vpc_id                                = aws_vpc.main.id
+  vpc_id                                  = aws_vpc.main.id
 
   route {
     vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
@@ -7,7 +7,7 @@ resource "aws_route_table" "private-rt" {
   }
 
   tags = {
-    Name                               = "private-route-table"
+    Name                                = "private-route-table"
   }
 }
 
