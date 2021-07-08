@@ -7,12 +7,25 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "main" {
+resource "aws_subnet" "public" {
+  count                              = length(var.SUBNET_ZONES)
   vpc_id                            = aws_vpc.main.id
-  cidr_block                      = "10.0.1.0/24"
+  cidr_block                      = element(var.PUBLIC_SUBNETS_CIDR, count.index)
+  availability_zone             =  element(var.SUBNET_ZONES, count.index)
 
   tags = {
-    Name                          = "Main"
+    Name                          = "public-subnet-${count.index + 1}"
   }
 }
 
+## only taging while adding the name it going to take first as '0' by avoiding that we will give '+ 1'
+resource "aws_subnet" "private" {
+  count                              = length(var.SUBNET_ZONES)
+  vpc_id                            = aws_vpc.main.id
+  cidr_block                      = element(var.PRIVATE_SUBNETS_CIDR, count.index)
+  availability_zone             =  element(var.SUBNET_ZONES, count.index)
+
+  tags = {
+    Name                          = "private-subnet-${count.index + 1}"
+  }
+}
