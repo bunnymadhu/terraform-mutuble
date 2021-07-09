@@ -1,50 +1,89 @@
 resource "aws_route_table" "private-rt" {
-  vpc_id                                  = aws_vpc.main.id
+  depends_on                                = [aws_subnet.private, aws_vpc_peering_connection.peer-connection, aws_nat_gateway.nat]
+  vpc_id                                        = aws_vpc.main.id
 
-  route {
-    vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
-    cidr_block                          = var.DEFAULT_VPC_CIDR
-  }
+//  route {
+//    vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
+//    cidr_block                          = var.DEFAULT_VPC_CIDR
+//  }
 
-  route {
-    cidr_block                          = "0.0.0.0/0"
-    nat_gateway_id                  = aws_nat_gateway.nat.id
-  }
-
+//  route {
+//    cidr_block                          = "0.0.0.0/0"
+//    nat_gateway_id                  = aws_nat_gateway.nat.id
+//  }
+//
   tags = {
-    Name                                = "private-route-table"
+    Name                                    = "private-route-table"
   }
 }
 
+# Create a route
+resource "aws_route" "public-rt-peer-route" {
+  depends_on                           = [null_resource.wait]
+  route_table_id                        = aws_route_table.public-rt.id
+  destination_cidr_block            = var.DEFAULT_VPC_CIDR
+  vpc_peering_connection_id    = aws_vpc_peering_connection.peer-connection.id
+}
+
+resource "aws_route" "private-rt-peer-route" {
+  depends_on                           = [null_resource.wait]
+  route_table_id                        = aws_route_table.private-rt.id
+  destination_cidr_block            = var.DEFAULT_VPC_CIDR
+  vpc_peering_connection_id    = aws_vpc_peering_connection.peer-connection.id
+}
+
+resource "aws_route" "public-rt-gateway" {
+  depends_on                           = [null_resource.wait]
+  route_table_id                        = aws_route_table.public-rt.id
+  destination_cidr_block            = "0.0.0.0/0"
+  gateway_id                            = aws_internet_gateway.igw.id
+}
+
+resource "aws_route" "private-rt-gateway" {
+  depends_on                           = [null_resource.wait]
+  route_table_id                        = aws_route_table.private-rt.id
+  destination_cidr_block            = "0.0.0.0/0"
+  nat_gateway_id                      = aws_nat_gateway.nat.id
+}
+
+
 resource "aws_route_table" "public-rt" {
-  vpc_id                                = aws_vpc.main.id
+  depends_on                          = [aws_subnet.public, aws_vpc_peering_connection.peer-connection, aws_internet_gateway.igw]
+  vpc_id                                  = aws_vpc.main.id
 
-  route {
-    vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
-    cidr_block                          = var.DEFAULT_VPC_CIDR
-  }
-
-  route {
-    cidr_block                          = "0.0.0.0/0"
-    gateway_id                         = aws_internet_gateway.igw.id
-  }
+//  route {
+//    vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
+//    cidr_block                          = var.DEFAULT_VPC_CIDR
+//  }
+//
+//  route {
+//    cidr_block                          = "0.0.0.0/0"
+//    gateway_id                         = aws_internet_gateway.igw.id
+//  }
 
 
   tags = {
-    Name                               = "public-route-table"
+    Name                                  = "public-route-table"
+  }
+}
+
+resource "null_resource" "wait" {
+  depends_on                          = [aws_route_table.private-rt, aws_route_table.public-rt]
+  provisioner "local-exec" {
+    command                           = "sleep 15"
   }
 }
 
 resource "aws_route" "route-in-default-vpc" {
-  route_table_id                     = var.DEFAULT_VPC_ROUTE_TABLE
-  destination_cidr_block         = var.VPC_CIDR
-  vpc_peering_connection_id = aws_vpc_peering_connection.peer-connection.id
+  route_table_id                       = var.DEFAULT_VPC_ROUTE_TABLE
+  destination_cidr_block           = var.VPC_CIDR
+  vpc_peering_connection_id   = aws_vpc_peering_connection.peer-connection.id
 }
 
 resource "aws_route_table_association" "public-association" {
-  count                                = length(var.SUBNET_ZONES)
-  subnet_id                          = element(aws_subnet.public.*.id, count.index)
-  route_table_id                    = aws_route_table.public-rt.id
+  count                                  = length(var.SUBNET_ZONES)
+  subnet_id                            = element(aws_subnet.public.*.id, count.index)
+  route_table_id                      = aws_route_table.public-rt.id
 }
 
 ## what is the use of public association in terraform---Provides a resource to create an association between a route table and a subnet or a route table and an internet gateway or virtual private gateway.
