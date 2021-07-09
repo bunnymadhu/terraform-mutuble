@@ -36,6 +36,8 @@ resource "aws_route_table_association" "public-association" {
   route_table_id                    = aws_route_table.public-rt.id
 }
 
+## what is the use of public association in terraform---Provides a resource to create an association between a route table and a subnet or a route table and an internet gateway or virtual private gateway.
+
 resource "aws_route_table_association" "private-association" {
   count                               = length(var.SUBNET_ZONES)
   subnet_id                         = element(aws_subnet.private.*.id, count.index)
