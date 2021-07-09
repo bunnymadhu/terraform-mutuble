@@ -5,5 +5,5 @@ resource "aws_internet_gateway" "igw" {
     Name = "igw"
   }
 }
-## igw--internet gateway
+## igw--internet gateway---------igw is the public subnets and netway is the private subnets...
 ## rt-route-table
