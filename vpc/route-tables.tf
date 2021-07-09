@@ -1,5 +1,5 @@
 resource "aws_route_table" "private-rt" {
-  depends_on                                = [aws_subnet.private, aws_vpc_peering_connection.peer-connection, aws_nat_gateway.nat]
+  depends_on                                = [ aws_subnet.private, aws_vpc_peering_connection.peer-connection, aws_nat_gateway.nat ]
   vpc_id                                        = aws_vpc.main.id
 
 //  route {
