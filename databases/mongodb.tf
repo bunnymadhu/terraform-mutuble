@@ -3,7 +3,7 @@ resource "aws_spot_instance_request" "mongodb" {
   spot_price                               = "0.0036"
   instance_type                          = "t2.micro"
   vpc_security_group_ids            = [aws_security_group.allow_mongodb.id]
-  subnet_id                                = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[1]
+//  subnet_id                                = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[1]
 
   tags                                        = {
     Name                                    = "mongodb-${var.ENV}"
