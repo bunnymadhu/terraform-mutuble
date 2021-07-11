@@ -23,15 +23,15 @@ data "terraform_remote_state" "vpc" {
   }
 
 ## terraform_Data_sources_aws_secretsmanager_secret
-data "aws_secretsmanager_secret" "secrets" {
-  name = "${var.ENV}-env"
-}
+//data "aws_secretsmanager_secret" "secrets" {
+//  name = "${var.ENV}-env"
+//}
 
 ## here why we give ${var,ENV} because in AWS_secretmanager we can save as name--    dev-env
 
-output "secrets" {
-  value = data.aws_secretsmanager_secret.secrets
-}
+//output "secrets" {
+//  value = data.aws_secretsmanager_secret.secrets
+//}
 
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
 
