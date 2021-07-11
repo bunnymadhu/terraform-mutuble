@@ -22,7 +22,7 @@ resource "aws_route" "public-rt-peer-route" {
   depends_on                           = [null_resource.wait]
   route_table_id                        = aws_route_table.public-rt.id
   destination_cidr_block            = var.DEFAULT_VPC_CIDR
-  vpc_peering_connection_id    = aws_vpc_peering_connection.peer-connection.id
+  vpc_peering_connection_id     = aws_vpc_peering_connection.peer-connection.id
 }
 
 resource "aws_route" "private-rt-peer-route" {
@@ -81,6 +81,7 @@ resource "aws_route" "route-in-default-vpc" {
 }
 
 resource "aws_route_table_association" "public-association" {
+  depends_on                         = [null_resource.wait]
   count                                  = length(var.SUBNET_ZONES)
   subnet_id                            = element(aws_subnet.public.*.id, count.index)
   route_table_id                      = aws_route_table.public-rt.id
@@ -89,7 +90,8 @@ resource "aws_route_table_association" "public-association" {
 ## what is the use of public association in terraform---Provides a resource to create an association between a route table and a subnet or a route table and an internet gateway or virtual private gateway.
 
 resource "aws_route_table_association" "private-association" {
-  count                               = length(var.SUBNET_ZONES)
-  subnet_id                         = element(aws_subnet.private.*.id, count.index)
-  route_table_id                   = aws_route_table.private-rt.id
+  depends_on                         = [null_resource.wait]
+  count                                 = length(var.SUBNET_ZONES)
+  subnet_id                           = element(aws_subnet.private.*.id, count.index)
+  route_table_id                     = aws_route_table.private-rt.id
 }
