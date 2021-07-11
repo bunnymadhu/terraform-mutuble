@@ -85,14 +85,4 @@ resource "null_resource" "ansible_mongo" {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
