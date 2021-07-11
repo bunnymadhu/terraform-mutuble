@@ -29,17 +29,18 @@ output "outputs" {
 ## terraform_Data_sources_aws_secretsmanager_secret
 
 data "aws_secretsmanager_secret" "secrets" {
-  name = "${var.ENV}-env"
+  name                              = "${var.ENV}-env"
 }
 
 ## here why we give ${var,ENV} because in AWS_secretmanager we can save as name--    dev-env
 
 data "aws_secretsmanager_secret_version" "secrets" {
-  secret_id = data.aws_secretsmanager_secret.secrets.id
+  secret_id                        = data.aws_secretsmanager_secret.secrets.id
 }
 
 output "secrets" {
-  value = data.aws_secretsmanager_secret_version.secrets
+  sensitive                       = true
+  value                            = data.aws_secretsmanager_secret_version.secrets
 }
 
 
