@@ -22,6 +22,10 @@ data "terraform_remote_state" "vpc" {
     }
   }
 
+output "outputs" {
+  value = data.terraform_remote_state.vpc.outputs
+}
+
 ## terraform_Data_sources_aws_secretsmanager_secret
 //data "aws_secretsmanager_secret" "secrets" {
 //  name = "${var.ENV}-env"
