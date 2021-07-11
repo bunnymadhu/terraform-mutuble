@@ -17,7 +17,7 @@ resource "aws_route_table" "private-rt" {
   }
 }
 
-# Create a route
+# Create a aws_route
 resource "aws_route" "public-rt-peer-route" {
   depends_on                           = [null_resource.wait]
   route_table_id                        = aws_route_table.public-rt.id
@@ -87,7 +87,7 @@ resource "aws_route_table_association" "public-association" {
   route_table_id                      = aws_route_table.public-rt.id
 }
 
-## what is the use of public association in terraform---Provides a resource to create an association between a route table and a subnet or a route table and an internet gateway or virtual private gateway.
+## what is the use of public association in terraform---Provides a resource to create an association between a route table and a subnet or a route table and an internet gateway or virtual                                                                            private gateway.
 
 resource "aws_route_table_association" "private-association" {
   depends_on                         = [null_resource.wait]
