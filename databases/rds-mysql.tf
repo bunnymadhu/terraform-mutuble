@@ -1,10 +1,10 @@
 resource "aws_db_instance" "default" {
-  identifier                           = "mysql-${var.ENV}"
-  allocated_storage              = 10
-  engine                              = "mysql"
-  engine_version                  = "5.7"
-  instance_class                   = "db.t3.micro"
-  name                                 = "default-launched"
+  identifier                            = "mysql-${var.ENV}"
+  allocated_storage               = 10
+  engine                               = "mysql"
+  engine_version                   = "5.7"
+  instance_class                    = "db.t3.micro"
+  name                                  = "default-launched"
   username                           = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_USER"]
   password                            = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_PASS"]
   parameter_group_name       = "default.mysql5.7"
@@ -13,7 +13,7 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name       = aws_db_subnet_group.subnet-group.name
   tags                                    = {
     Name                                = "mysql-${var.ENV}"
-    Environment                       = var.ENV
+    Environment                      = var.ENV
   }
 }
 
@@ -29,15 +29,15 @@ resource "aws_db_subnet_group" "subnet-group" {
   subnet_ids                         = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS
 
   tags = {
-    Name                              = "mysql-db-group-${var.ENV}"
-    Environment                       = var.ENV
+    Name                               = "mysql-db-group-${var.ENV}"
+    Environment                     = var.ENV
   }
 }
 
 resource "aws_security_group" "allow_rds_mysql" {
   name                                = "allow_rds_mysql"
   description                        = "AllowRdsMySQL"
-  vpc_id                               = data.terraform_remote_state.vpc.outputs.VPC_ID
+  vpc_id                              = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress {
     description                     = "MYSQL"
@@ -58,8 +58,8 @@ resource "aws_security_group" "allow_rds_mysql" {
     ipv6_cidr_blocks            = ["::/0"]
   }
 
-  tags = {
+  tags                               = {
     Name                           = "AllowRdsMySQL"
-    Environment                       = var.ENV
+    Environment                  = var.ENV
   }
 }
