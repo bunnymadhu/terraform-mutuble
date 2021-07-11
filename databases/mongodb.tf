@@ -1,17 +1,19 @@
-//resource "aws_spot_instance_request" "mongodb" {
-//  ami                                         = data.aws_ami.centos7.id
-//  spot_price                               = "0.0036"
-//  instance_type                          = "t2.micro"
-//  vpc_security_group_ids            = ["sg-01d1633aaca167f8e"]
-//
-//  tags                                        = {
-//    Name                                    = element(var.COMPONENTS, count.index)
-//  }
-//}
-//
-//## u can find the "aws spot instance terraform" -- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/spot_instance_request to launch instances by using spot request..
-//
-//
+resource "aws_spot_instance_request" "mongodb" {
+  ami                                         = data.aws_ami.centos7.id
+  spot_price                               = "0.0036"
+  instance_type                          = "t2.micro"
+  vpc_security_group_ids            = [aws_security_group.allow_mongodb.id]
+  subnet_id                                = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[1]
+
+  tags                                        = {
+    Name                                    = "mongodb-${var.ENV}"
+    Environment                           = var.ENV
+  }
+}
+
+## u can find the "aws spot instance terraform" -- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/spot_instance_request to launch instances by using spot request..
+## it is in terraform_vpc_aws_Security group
+
 resource "aws_security_group" "allow_mongodb" {
   name                                      = "allow_mongodb"
   description                              = "AllowMongoDB"
@@ -50,5 +52,32 @@ resource "aws_security_group" "allow_mongodb" {
     Name                               = "AllowMongoDB"
   }
 }
-
 ## if  we give this data,,it allows in AWS security groups and  it will shows  inbound rules as allow_mongodb...
+
+## so finally we can push above data in AWS there is  one instance created in the name mongodb,
+## so we can connect to that instnace load the mongodb with the help of ansible because in terraform we can thru ansiblke right...
+
+//resource "null_resource" "ansible_mongo" {
+//  provisioner "local-exec" {
+//    command                         = "sleep 30"
+//  }
+//
+//  provisioner "remote-exec" {
+//    connection {
+//      host = aws_spot_instance_request.mongodb.private_ip
+//      user = ""
+//    }
+//  }
+//}
+
+
+
+
+
+
+
+
+
+
+
+## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)

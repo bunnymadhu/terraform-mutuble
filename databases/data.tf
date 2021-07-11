@@ -10,6 +10,8 @@ data "aws_ami" "centos7" {
 //  value = data.aws_ami.centos7
 //}
 
+
+## from terraform state file_data source_....in chrome
 data "terraform_remote_state" "vpc" {
   backend = "s3"
 
@@ -20,5 +22,19 @@ data "terraform_remote_state" "vpc" {
     }
   }
 
-## from terraform state file_data source_....in chrome
+## terraform_Data_sources_aws_secretsmanager_secret
+data "aws_secretsmanager_secret" "secrets" {
+  name = "${var.ENV}-env"
+}
+
+## here why we give ${var,ENV} because in AWS_secretmanager we can save as name--    dev-env
+
+output "secrets" {
+  value = data.aws_secretsmanager_secret.secrets
+}
+
+## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
+
+
+
 
