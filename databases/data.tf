@@ -38,14 +38,13 @@ data "aws_secretsmanager_secret_version" "secrets" {
   secret_id                        = data.aws_secretsmanager_secret.secrets.id
 }
 
-output "secrets" {
-  sensitive                       = true
-  value                            = data.aws_secretsmanager_secret_version.secrets
-}
-
+//output "secrets" {
+//  value                            = base64encode(jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"])
+//}
 
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
 
+## to decode the data from this secretmanager code with help of in chrome base64 encode terraform
 
 
 
