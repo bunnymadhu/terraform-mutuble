@@ -1,7 +1,7 @@
 data "aws_ami" "centos7" {
-  most_recent      = true
-  name_regex       = "^Centos-7-DevOps-Practice"
-  owners           = ["973714476881"]
+  most_recent                            = true
+  name_regex                            = "^Centos-7-DevOps-Practice"
+  owners                                   = ["973714476881"]
 }
 
 ## terraform_ami_EC2_Data Sources_aws-ami
@@ -23,19 +23,25 @@ data "terraform_remote_state" "vpc" {
   }
 
 output "outputs" {
-  value = data.terraform_remote_state.vpc.outputs
+  value                                = data.terraform_remote_state.vpc.outputs
 }
 
 ## terraform_Data_sources_aws_secretsmanager_secret
-//data "aws_secretsmanager_secret" "secrets" {
-//  name = "${var.ENV}-env"
-//}
+
+data "aws_secretsmanager_secret" "secrets" {
+  name = "${var.ENV}-env"
+}
 
 ## here why we give ${var,ENV} because in AWS_secretmanager we can save as name--    dev-env
 
-//output "secrets" {
-//  value = data.aws_secretsmanager_secret.secrets
-//}
+data "aws_secretsmanager_secret_version" "secrets" {
+  secret_id = data.aws_secretsmanager_secret.secrets.id
+}
+
+output "secrets" {
+  value = data.aws_secretsmanager_secret_version.secrets
+}
+
 
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
 
