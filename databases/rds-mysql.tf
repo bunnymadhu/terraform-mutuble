@@ -14,6 +14,7 @@ resource "aws_db_instance" "default" {
   tags                                    = {
     Name                                = "mysql-${var.ENV}"
     Environment                      = var.ENV
+
   }
 }
 
