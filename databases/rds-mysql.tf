@@ -38,7 +38,7 @@ resource "aws_db_subnet_group" "subnet-group" {
 resource "aws_security_group" "allow_rds_mysql" {
   name                                = "allow_rds_mysql"
   description                        = "AllowRdsMySQL"
-  vpc_id                              = data.terraform_remote_state.vpc.outputs.VPC_ID
+  vpc_id                               = data.terraform_remote_state.vpc.outputs.VPC_ID
 
   ingress {
     description                     = "MYSQL"
@@ -59,8 +59,8 @@ resource "aws_security_group" "allow_rds_mysql" {
     ipv6_cidr_blocks            = ["::/0"]
   }
 
-  tags                               = {
+  tags                                = {
     Name                           = "AllowRdsMySQL"
-    Environment                  = var.ENV
+    Environment                 = var.ENV
   }
 }
