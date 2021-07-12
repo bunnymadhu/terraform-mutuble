@@ -14,7 +14,6 @@ resource "aws_spot_instance_request" "mongodb" {
 
 ## u can find the "aws spot instance terraform" -- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/spot_instance_request to launch instances by using spot request..
 ## it is in terraform_vpc_aws_Security group
-
 resource "aws_security_group" "allow_mongodb" {
   name                                      = "allow_mongodb"
   description                              = "AllowMongoDB"
