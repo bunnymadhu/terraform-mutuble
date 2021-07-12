@@ -62,27 +62,35 @@ resource "null_resource" "ansible_mongo" {
     command                         = "sleep 30"
   }
 
-  provisioner "remote-exec" {
-    connection {
-      host                             = aws_spot_instance_request.mongodb.private_ip
-      user                            = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
-      password                     = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
+  resource "null_resource" "wait" {
+    provisioner "local-exec" {
+      command                      = "sleep 30"
     }
-
-    inline = [
-      "sudo yum install ansible -y",
-      "sudo yum remove ansible -y",
-      "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
-      "sudo yum remove python-pip -y",
-      "sudo cd /usr/local/src",
-      "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
-      "sudo python get-pip.py",
-      "sudo pip3 install ansible==4.1.0",
-      "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
-
-    ]
-
   }
-}
+
+  resource "null_resource" "ansible-mongo" {
+    depends_on                  = [null_resource.wait]
+    provisioner "remote-exec" {
+      connection {
+        host                        = aws_spot_instance_request.mongodb.private_ip
+        user                        = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
+        password                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
+      }
+
+      inline = [
+        "sudo yum install ansible -y",
+        "sudo yum remove ansible -y",
+        "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
+        "sudo yum remove python-pip -y",
+        "sudo cd /usr/local/src",
+        "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
+        "sudo python get-pip.py",
+        "sudo pip3 install ansible==4.1.0",
+        "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
+
+      ]
+
+    }
+  }
 
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
