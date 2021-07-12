@@ -4,11 +4,11 @@ resource "aws_spot_instance_request" "mongodb" {
   instance_type                          = "t3.micro"
   vpc_security_group_ids            = [aws_security_group.allow_mongodb.id]
   subnet_id                                = data.terraform_remote_state.vpc.outputs.PRIVATE_SUBNETS[1]
-  wait_for_fulfillment                   = true
+  wait_for_fulfillment                    = true
 
   tags                                        = {
     Name                                    = "mongodb-${var.ENV}"
-    Environment                           = var.ENV
+    Environment                          = var.ENV
   }
 }
 
@@ -67,19 +67,23 @@ resource "null_resource" "ansible-mongo" {
   depends_on                   = [null_resource.wait]
   provisioner "remote-exec" {
     connection {
-      host                        = aws_spot_instance_request.mongodb.private_ip
-      user                        = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_user"]
-      password                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_password"]
+      host                          = aws_spot_instance_request.mongodb.private_ip
+      user                          = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_user"]
+      password                  = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_password"]
     }
 
      inline = [
-       "sudo yum install ansible -y",
-       "sudo yum remove ansible -y",
-       "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
-       "sudo yum remove python-pip -y",
-       "sudo cd /usr/local/src",
-       "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
-       "sudo python get-pip.py",
+//       "sudo yum install ansible -y",
+//       "sudo yum remove ansible -y",
+//       "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
+//       "sudo yum remove python-pip -y",
+//       "sudo cd /usr/local/src",
+//       "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
+//       "sudo python get-pip.py",
+//       "sudo pip3 install ansible==4.1.0",
+//       "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
+       "sudo yum install python3-pip -y",
+       "sudo pip3 install pip --upgrade",
        "sudo pip3 install ansible==4.1.0",
        "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
   }
