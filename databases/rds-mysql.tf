@@ -14,7 +14,6 @@ resource "aws_db_instance" "default" {
   tags                                    = {
     Name                                = "mysql-${var.ENV}"
     Environment                      = var.ENV
-
   }
 }
 
@@ -61,6 +60,6 @@ resource "aws_security_group" "allow_rds_mysql" {
 
   tags                                = {
     Name                           = "AllowRdsMySQL"
-    Environment                 = var.ENV
+    Environment                  = var.ENV
   }
 }
