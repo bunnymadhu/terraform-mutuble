@@ -15,3 +15,14 @@
 ## in dev.azure.com destroy pipeline will not work properly untill u can to dynamodb in aws delete terraform.tf state file....
 
 ## by using VPC Route Tables we can connec by peering connection to one vpc to another vpc..(copy that IPv4 ID and paste the route tables in that add tags in their paste the IPv4 ID..)
+
+
+## "sudo yum install ansible -y",
+## "sudo yum remove ansible -y",
+## "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
+## "sudo yum remove python-pip -y",
+## "sudo cd /usr/local/src",
+## "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
+## "sudo python get-pip.py",
+## "sudo pip3 install ansible==4.1.0",
+# "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
