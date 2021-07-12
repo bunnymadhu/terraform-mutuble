@@ -11,10 +11,10 @@ resource "aws_db_instance" "default" {
   skip_final_snapshot             = true
   vpc_security_group_ids       = [aws_security_group.allow_rds_mysql.id]
   db_subnet_group_name       = aws_db_subnet_group.subnet-group.name
-  wait_for_fulfillment               = true
   tags                                    = {
     Name                                = "mysql-${var.ENV}"
     Environment                      = var.ENV
+    wait_for_fulfillment               = true
 
   }
 }
