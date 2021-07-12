@@ -5,8 +5,8 @@ resource "aws_db_instance" "default" {
   engine_version                   = "5.7"
   instance_class                    = "db.t3.micro"
   name                                  = "defaultlaunched"
-  username                           = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_USER"]
-  password                            = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_PASS"]
+  username                           = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_user"]
+  password                            = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["RDS_MYSQL_passowrd"]
   parameter_group_name       = "default.mysql5.7"
   skip_final_snapshot             = true
   vpc_security_group_ids       = [aws_security_group.allow_rds_mysql.id]

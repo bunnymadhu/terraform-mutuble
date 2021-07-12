@@ -57,40 +57,32 @@ resource "aws_security_group" "allow_mongodb" {
 ## so finally we can push above data in AWS there is  one instance created in the name mongodb,
 ## so we can connect to that instnace load the mongodb with the help of ansible because in terraform we can thru ansiblke right...
 
-resource "null_resource" "ansible_mongo" {
+resource "null_resource" "wait" {
   provisioner "local-exec" {
-    command                         = "sleep 30"
+    command                      = "sleep 30"
   }
+}
 
-  resource "null_resource" "wait" {
-    provisioner "local-exec" {
-      command                      = "sleep 30"
+resource "null_resource" "ansible-mongo" {
+  depends_on                   = [null_resource.wait]
+  provisioner "remote-exec" {
+    connection {
+      host                        = aws_spot_instance_request.mongodb.private_ip
+      user                        = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_user"]
+      password                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_password"]
     }
+
+     inline = [
+       "sudo yum install ansible -y",
+       "sudo yum remove ansible -y",
+       "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
+       "sudo yum remove python-pip -y",
+       "sudo cd /usr/local/src",
+       "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
+       "sudo python get-pip.py",
+       "sudo pip3 install ansible==4.1.0",
+       "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
   }
-
-  resource "null_resource" "ansible-mongo" {
-    depends_on                  = [null_resource.wait]
-    provisioner "remote-exec" {
-      connection {
-        host                        = aws_spot_instance_request.mongodb.private_ip
-        user                        = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_USER"]
-        password                = jsondecode(data.aws_secretsmanager_secret_version.secrets.secret_string)["SSH_PASS"]
-      }
-
-      inline = [
-        "sudo yum install ansible -y",
-        "sudo yum remove ansible -y",
-        "sudo rm -rf /usr/lib/python2.7/site-packages/ansible*",
-        "sudo yum remove python-pip -y",
-        "sudo cd /usr/local/src",
-        "sudo wget https://bootstrap.pypa.io/pip/2.7/get-pip.py",
-        "sudo python get-pip.py",
-        "sudo pip3 install ansible==4.1.0",
-        "ansible-pull -i localhost, -U https://github.com/bunnymadhu/ansible.git roboshop-pull.yml -e COMPONENT=mongodb"
-
-      ]
-
-    }
-  }
+}
 
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
