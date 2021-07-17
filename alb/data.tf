@@ -11,6 +11,7 @@ data "terraform_remote_state" "vpc" {
 
 
 
+
 ## to decode the data from this secretmanager code with help of in chrome base64 encode terraform
 
 
