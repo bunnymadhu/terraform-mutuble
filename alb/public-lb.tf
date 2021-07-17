@@ -1,6 +1,3 @@
-variable "ENV" {
-  default = ""
-}
 resource "aws_lb" "public" {
   name                                       = "alb-public-${var.ENV}"
   internal                                    = false
