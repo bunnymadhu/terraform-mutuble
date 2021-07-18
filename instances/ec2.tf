@@ -98,3 +98,34 @@ resource "aws_lb_target_group_attachment" "tg-attach" {
   target_id                     = element(aws_spot_instance_request.instances.*.spot_instance_id, count.index )
   port                            = var.PORT
 }
+
+## it is in aws_targetgroup_terraform_ Elastic Load Balancing v2 (ALB/NLB)_aws_lb_listener_rule
+
+resource "aws_lb_listener_rule" "static" {
+  listener_arn              = var.LB_ARN
+  priority                     = var.LB_RULE_WEIGHT
+
+  action {
+    type                       = "forward"
+    target_group_arn    = aws_lb_target_group.target-group.arn
+  }
+
+  condition {
+    host_header {
+      values                 = ["${var.COMPONENT}-${var.ENV}.roboshop.internal"]
+    }
+  }
+}
+
+## if any request is coming as catalogue-dev.roboshop.internal,,so send targets to this catalogue-dev...So we need to vreate DNS record for catalogue-dev right we need to create dns record
+
+##it is in aws_route53_aws_route53_record
+
+resource "aws_route53_record" "component-record" {
+  zone_id                = data.terraform_remote_state.vpc.outputs.HOSTED_ZONE_ID
+  name                   = "${var.COMPONENT}-${var.ENV}.roboshop.internal"
+  type                     = "CNAME"
+  ttl                         = "300"
+  records                = [var.LB_DNSNAME]
+}
+

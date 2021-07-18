@@ -9,9 +9,9 @@ output "PUBLIC_LB_ARN" {
 ## ARN== amazon resource name
 
 output "PRIVATE_LB_DNSNAME" {
-  value = aws_lb.private.dns_name
+  value               = aws_lb.private.dns_name
 }
 
 output "PUBLIC_LB_DNSNAME" {
-  value = aws_lb.public.dns_name
+  value              = aws_lb.public.dns_name
 }

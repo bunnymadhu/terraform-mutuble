@@ -6,3 +6,4 @@ PUBLIC_SUBNETS_CIDR             = [ "10.0.6.0/24", "10.0.7.0/24", "10.0.8.0/24",
 DEFAULT_VPC_ID                       = "vpc-3a8b0447"
 DEFAULT_VPC_ROUTE_TABLE    = "rtb-05e0ea7b"
 DEFAULT_VPC_CIDR                   = "172.31.0.0/16"
+HOSTED_ZONE_ID                       = "Z03444518JCZ2U6FF5S6"
