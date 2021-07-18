@@ -6,4 +6,5 @@ variable "INSTANCE_TYPE"          {}
 variable "SPOT_PRICE"                {}
 variable "LB_ARN"                        {}
 variable "LB_DNSNAME"               {}
-variable "LB_RULE_WEIGHT"       {}
+variable "LB_RULE_WEIGHT"        {}
+variable "LISTENER_ARN"             {}
