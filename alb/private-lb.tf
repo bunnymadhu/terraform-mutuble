@@ -42,18 +42,21 @@ resource "aws_security_group" "allow_private_lb" {
   }
 }
 
+
+## see aws_Elastic Load Balancing v2 (ALB/NLB)_aws_lb_listener--fixed response
+
 resource "aws_lb_listener" "common" {
-  load_balancer_arn           = aws_lb.private.arn
-  port                                = "80"
-  protocol                          = "HTTP"
+  load_balancer_arn             = aws_lb.private.arn
+  port                                  = "80"
+  protocol                            = "HTTP"
 
   default_action {
-    type                             = "fixed-response"
+    type                               = "fixed-response"
 
     fixed_response {
-      content_type              = "text/plain"
-      message_body          = "OK"
-      status_code               = "200"
+      content_type                = "text/plain"
+      message_body            = "OK"
+      status_code                 = "200"
     }
   }
 }
