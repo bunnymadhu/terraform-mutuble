@@ -101,21 +101,21 @@ resource "aws_lb_target_group_attachment" "tg-attach" {
 
 ## it is in aws_targetgroup_terraform_ Elastic Load Balancing v2 (ALB/NLB)_aws_lb_listener_rule
 
-resource "aws_lb_listener_rule" "static" {
-  listener_arn              = var.LB_ARN
-  priority                     = var.LB_RULE_WEIGHT
-
-  action {
-    type                       = "forward"
-    target_group_arn    = aws_lb_target_group.target-group.arn
-  }
-
-  condition {
-    host_header {
-      values                 = ["${var.COMPONENT}-${var.ENV}.roboshop.internal"]
-    }
-  }
-}
+//resource "aws_lb_listener_rule" "static" {
+//  listener_arn              = var.LB_ARN
+//  priority                     = var.LB_RULE_WEIGHT
+//
+//  action {
+//    type                       = "forward"
+//    target_group_arn    = aws_lb_target_group.target-group.arn
+//  }
+//
+//  condition {
+//    host_header {
+//      values                 = ["${var.COMPONENT}-${var.ENV}.roboshop.internal"]
+//    }
+//  }
+//}
 
 ## if any request is coming as catalogue-dev.roboshop.internal,,so send targets to this catalogue-dev...So we need to vreate DNS record for catalogue-dev right we need to create dns record
 
