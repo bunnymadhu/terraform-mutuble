@@ -12,6 +12,14 @@ resource "aws_spot_instance_request" "mongodb" {
   }
 }
 
+## we can give time here for to create instances at that particular names...means var.COMPONENTS
+
+resource "aws_ec2_tag" "mongo" {
+  resource_id                             = aws_spot_instance_request.mongodb.spot_instance_id
+  key                                         = "Name"
+  value                                       = "mongodb-${var.ENV}"
+}
+
 ## u can find the "aws spot instance terraform" -- https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/spot_instance_request to launch instances by using spot request..
 ## it is in terraform_vpc_aws_Security group
 resource "aws_security_group" "allow_mongodb" {
