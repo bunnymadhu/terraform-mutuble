@@ -4,8 +4,10 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames     = true
   enable_dns_support          = true
 
-  ## cat /etc/nginx/default.d/roboshop.conf
-  ## nslookup catalogue-dev.roboshop.internal,,,,,,, we added route53.tf for vpc dns so wait for the dns request and we will go to VPC in aws in that whatever u run the vpc it can create one dev right,select and  in that options both enabled DNS Hostnames,DNS Resolution Support...
+## cat /etc/nginx/default.d/roboshop.conf
+## nslookup catalogue-dev.roboshop.internal,,,,,,, we added route53.tf for vpc dns so wait for the dns request and we will go to VPC in aws in that whatever u run the vpc it can create one dev right,select and  in that options both enabled DNS Hostnames,DNS Resolution Support...
+## cat /etc/resolv.conf
+## Dig (Domain Information Groper) is a powerful command-line tool for querying DNS name servers.to identify the DNS update r not dig cart.roboshop.internal
 
   tags = {
     Name                            = var.ENV
