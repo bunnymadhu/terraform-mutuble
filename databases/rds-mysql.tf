@@ -63,3 +63,20 @@ resource "aws_security_group" "allow_rds_mysql" {
     Environment                  = var.ENV
   }
 }
+
+resource "aws_route53_record" "mysql-record" {
+  zone_id                = data.terraform_remote_state.vpc.outputs.HOSTED_ZONE_ID
+  name                   = "mysql-${var.ENV}.roboshop.internal"
+  type                     = "CNAME"
+  ttl                         = "300"
+  records                = [aws_db_instance.default.address]
+}
+
+## i want print all the above information by using below output
+
+//output "rds" {
+//  value                             = aws_db_instance.default
+//  sensitive                        = true
+//}
+
+## if above we dont give sensitive=true in alb it will throw us to an error in azure pipeline release

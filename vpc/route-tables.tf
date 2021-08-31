@@ -33,7 +33,9 @@ resource "aws_route" "private-rt-peer-route" {
 }
 
 resource "aws_route" "public-rt-gateway" {
-  depends_on                           = [null_resource.wait]
+  depends_on                           = [null_o
+
+    resource.wait]
   route_table_id                        = aws_route_table.public-rt.id
   destination_cidr_block            = "0.0.0.0/0"
   gateway_id                            = aws_internet_gateway.igw.id

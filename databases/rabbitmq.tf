@@ -44,3 +44,20 @@ resource "aws_security_group" "allow_rabbitmql" {
     Environment                  = var.ENV
   }
 }
+
+## we creted one dns record in instances/ec2.tf in that record copy and paste here and update as elastic_cache
+
+resource "aws_route53_record" "rabbitmq-record" {
+  zone_id                = data.terraform_remote_state.vpc.outputs.HOSTED_ZONE_ID
+  name                   = "rabbitmq-${var.ENV}.roboshop.internal"
+  type                     = "CNAME"
+  ttl                         = "300"
+  records                = [aws_spot_instance_request.mongodb.private_ip]
+}
+
+
+## i want print all the above information by using below output
+
+//output "rabbitmq" {
+//  value                             = aws_mq_broker.rabbitmq
+//}

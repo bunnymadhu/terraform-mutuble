@@ -92,4 +92,15 @@ resource "null_resource" "ansible-mongo" {
   }
 }
 
+## we creted one dns record in instances/ec2.tf in that record copy and paste here and update as mongodb
+
+resource "aws_route53_record" "mongodb-record" {
+  zone_id                = data.terraform_remote_state.vpc.outputs.HOSTED_ZONE_ID
+  name                   = "mongodb-${var.ENV}.roboshop.internal"
+  type                     = "A"
+  ttl                         = "300"
+  records                = [aws_spot_instance_request.mongodb.private_ip]
+}
+
+
 ## in AWS  there is secretsmanager which stores only secrets...so we can give dev_ENV as SSH_user name(centos) and SSH_password(Devops321)
